@@ -1,10 +1,10 @@
 package utils;
 
 public final class TruthTable {
-    public static double[][] getTruthTable(int nEntradas){
-        double[][] tabela = new double[(int)Math.pow(2,nEntradas)][];
+    public static double[][] getTruthTable(int entries){
+        double[][] tabela = new double[(int)Math.pow(2,entries)][];
         for(int i = 0; i < tabela.length; i++){
-            tabela[i] = new double[nEntradas];
+            tabela[i] = new double[entries];
         }
         for(int i = 0; i < tabela.length; i++){
             for(int j = 0; j < tabela[i].length; j++){
@@ -14,8 +14,8 @@ public final class TruthTable {
         return tabela;
     }
 
-    public static double[] getExit(int nEntradas, char operation){
-        double[] saida = new double[(int)Math.pow(2,nEntradas)];
+    public static double[] getExit(int entries, char operation){
+        double[] saida = new double[(int)Math.pow(2,entries)];
         if(operation == '&'){
             for(int i = 0; i < saida.length - 1; i++){
                 saida[i] = 0;
@@ -28,7 +28,7 @@ public final class TruthTable {
                 saida[i] = 1;
             }
         }
-        else if(operation == '+' && nEntradas == 2){
+        else if(operation == '+' && entries == 2){
             for(int i = 0; i < saida.length; i++){
                 saida[i] = 0;
             }

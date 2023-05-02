@@ -57,7 +57,7 @@ public class Main {
         table = TruthTable.getTruthTable(entries);
         exit = TruthTable.getExit(entries, '&');
         TruthTable.printTable(table, exit);
-        System.out.println("Treinando o perceptron...");
+        System.out.println("--- Treinando o perceptron ---");
         perceptron = new Perceptron(entries, RATE_KNOWLEDGE, ACCEPTENCE, RANDOM_SEED, Functions::BinaryStep);
         perceptron.trainEpoch(table, exit, EPOCHS, 0);
         trained = true;
@@ -92,7 +92,7 @@ public class Main {
 
     public static void menuTeste() {
         if (!trained) {
-            System.out.println("!Perceptron não trainado!");
+            System.out.println("!Perceptron não treinado!");
         }
         System.out.println("Digite as entradas:");
         double[] entradasTeste = new double[entries];
