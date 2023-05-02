@@ -1,18 +1,15 @@
 import classes.Perceptron;
 import ui.Menu;
+import utils.Functions;
+import utils.TruthTable;
 
 public class Main {
     private static Menu menu = new Menu();
-    private static int nEntradas = 0;
-    private static double[][] tabela = null;
-    private static double[] saida = null;
-    private static double taxaAprendizagem = 0.0001;
-    private static double tolerancia = 0.00001;
-    private static int epochs = 10000;
-    private static int randomSeed = -1;
-    private static boolean treinado = false;
-    private static String porta = "";
-    private static Perceptron p = new Perceptron(nEntradas, taxaAprendizagem, tolerancia, randomSeed, funcao:Perceptron.Functions.BinaryStep);
+    private final static double RATE_KNOWLEDGE = 0.0001;
+    private final static double ACCEPTENCE = 0.00001;
+    private final static int EPOCHS = 10000;
+    private final static int RANDOM_SEED = -1;
+    private static Perceptron perceptron = null;
 
     public static void main(String[] args) {
         try {
@@ -24,73 +21,92 @@ public class Main {
         }
     }
 
-    public static void startApp(){
+    public static void startApp() {
         int opcao = menu.showMenu();
-        while (opcao != -1){
-            switch (opcao)
-            {
-                case -1:
-                    System.out.println("Saindo...");
+        while (opcao != 0) {
+            switch (opcao) {
+                case 0:
+                    System.out.println("Finalizado!");
                     break;
                 case 1:
-                    System.out.print("Digite o número de entradas da AND: ");
-                    nEntradas = int.Parse(System.Console.ReadLine()!);
-                    tabela = geraTabelaVerdade(nEntradas);
-                    saida = geraSaidaEsperada(nEntradas, '&');
-                    printaTabela(tabela, saida);
-                    System.out.println("Treinando o perceptron...");
-                    p = new Perceptron(nEntradas, taxaAprendizagem, tolerancia, randomSeed, funcao:Perceptron.Functions.BinaryStep);
-                    p.TrainEpoch(tabela, saida, epochs);
-                    treinado = true;
-                    porta = "AND";
+                    menuAnd();
                     break;
                 case 2:
-                    System.out.print("Digite o número de entradas da OR: ");
-                    nEntradas = int.Parse(System.Console.ReadLine()!);
-                    tabela = geraTabelaVerdade(nEntradas);
-                    saida = geraSaidaEsperada(nEntradas, '|');
-                    printaTabela(tabela, saida);
-                    System.out.println("Treinando o perceptron...");
-                    p = new Perceptron(nEntradas, taxaAprendizagem, tolerancia, randomSeed, funcao:Perceptron.Functions.BinaryStep);
-                    p.TrainEpoch(tabela, saida, epochs);
-                    treinado = true;
-                    porta = "OR";
+                    menuOr();
                     break;
                 case 3:
-                    nEntradas = 2;
-                    tabela = geraTabelaVerdade(nEntradas);
-                    saida = geraSaidaEsperada(nEntradas, '&');
-                    printaTabela(tabela, saida);
-                    System.out.println("Treinando o perceptron...");
-                    p = new Perceptron(nEntradas, taxaAprendizagem, tolerancia, randomSeed, funcao:Perceptron.Functions.BinaryStep);
-                    p.TrainEpoch(tabela, saida, epochs);
-                    treinado = true;
-                    porta = "XOR";
+                    menuXor();
                     break;
                 case 4:
-                    if(!treinado){
-                        System.out.println("Perceptron não treinado!");
-                        break;
-                    }
-                    System.out.println("Digite as entradas:");
-                    double[] entradasTeste = new double[nEntradas];
-                    for(int i = 0; i < entradasTeste.Length; i++){
-                        Console.Write(i + ": ");                        
-                        entradasTeste[i] = double.Parse(System.Console.ReadLine()!);
-                    }
-                    double saidaTeste = p.Predict(entradasTeste);
-                    System.out.println("\n/*****************/");
-                    System.out.println("Saída: " + saidaTeste);
-                    System.out.println("/*****************/\n");
+                    menuTeste();
                     break;
                 default:
-                    System.out.println("Opção inválida!");
+                    System.err.println("Opção inválida!");
                     break;
             }
-            if(treinado){
-                System.out.println("Treinado com " + porta);
+            if (trained) {
+                System.out.println("Perceptron treinado com " + door);
             }
             opcao = menu.showMenu();
         }
     }
+
+    public static void menuAnd() {
+        entries = menu.entradasAnd();
+        table = TruthTable.getTruthTable(entries);
+        exit = TruthTable.getExit(entries, '&');
+        TruthTable.printTable(table, exit);
+        System.out.println("Treinando o perceptron...");
+        perceptron = new Perceptron(entries, RATE_KNOWLEDGE, ACCEPTENCE, RANDOM_SEED, Functions::BinaryStep);
+        perceptron.trainEpoch(table, exit, EPOCHS, 0);
+        trained = true;
+        door = "AND";
+    }
+
+    public static void menuOr() {
+        entries = menu.entradasOr();
+        table = TruthTable.getTruthTable(entries);
+        exit = TruthTable.getExit(entries, '|');
+        TruthTable.printTable(table, exit);
+        System.out.println("--- Treinando o perceptron no momento ---");
+        perceptron = new Perceptron(entries, RATE_KNOWLEDGE, ACCEPTENCE, RANDOM_SEED,
+                Functions::BinaryStep);
+        perceptron.trainEpoch(table, exit, EPOCHS, 0);
+        trained = true;
+        door = "OR";
+    }
+
+    public static void menuXor() {
+        entries = 2;
+        table = TruthTable.getTruthTable(entries);
+        exit = TruthTable.getExit(entries, '&');
+        TruthTable.printTable(table, exit);
+        System.out.println("--- Treinando o perceptron ---");
+        perceptron = new Perceptron(entries, RATE_KNOWLEDGE, ACCEPTENCE, RANDOM_SEED,
+                Functions::BinaryStep);
+        perceptron.trainEpoch(table, exit, EPOCHS, 0);
+        trained = true;
+        door = "XOR";
+    }
+
+    public static void menuTeste() {
+        if (!trained) {
+            System.out.println("!Perceptron não trainado!");
+        }
+        System.out.println("Digite as entradas:");
+        double[] entradasTeste = new double[entries];
+        for (int i = 0; i < entradasTeste.length; i++) {
+            System.out.print(i + ": ");
+            entradasTeste[i] = menu.getEntrada();
+        }
+        double exitTeste = perceptron.predict(entradasTeste);
+        System.out.println("Saída: " + exitTeste);
+    }
+
+    // variaveis
+    private static int entries = 0;
+    private static double[][] table = null;
+    private static double[] exit = null;
+    private static boolean trained = false;
+    private static String door = "";
 }
