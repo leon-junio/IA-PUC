@@ -6,10 +6,10 @@ import java.util.Arrays;
 public class Menu {
     private static final Scanner scanner = new Scanner(System.in);
     private static final String[] options = {
-            "1 - Treinar porta AND",
-            "2 - Treinar porta OR",
-            "3 - Treinar porta XOR",
-            "4 - Testar",
+            "1 - Treino -> AND",
+            "2 - Treinar -> OR",
+            "3 - Treinar -> XOR",
+            "4 - Realziar Testes",
             "0 - Sair"
     };
 

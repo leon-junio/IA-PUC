@@ -8,7 +8,6 @@ public final class Neural {
 
     private static final DecimalFormat df = new DecimalFormat("#.##");
 
-    
     public static double[][] suffle(double[][] table, double[] exits) {
         Random gen = new Random();
         for (int i = 0; i < table.length; i++) {
