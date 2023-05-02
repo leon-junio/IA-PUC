@@ -17,8 +17,8 @@ public class Perceptron implements Neuralable {
         if (randomSeed == -1) {
             randomSeed = (int) new java.util.Date().getTime();
         }
-        this.biasWeigth = Neural.doRandomWeigth(this.weigths, randomSeed);
         this.weigths = new double[entries];
+        this.biasWeigth = Neural.doRandomWeigth(this.weigths, randomSeed);
         if (function == null) {
             function = Functions::DSigmoid;
         }

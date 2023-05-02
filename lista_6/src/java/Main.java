@@ -13,6 +13,7 @@ public class Main {
 
     public static void main(String[] args) {
         try {
+            System.out.println("Rede Neural - IA 2023 (Leon Junio Martins Ferreira)");
             startApp();
         } catch (Exception e) {
             System.err.println("Error at the Main Thread: " + e.getMessage());
